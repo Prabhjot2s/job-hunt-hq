@@ -48,7 +48,16 @@ def normalise(item, scored_by="claude"):
     rec = {k: item.get(k) for k in ("fit", "verdict", "company", "title", "tier", "location", "work_mode",
                                     "salary", "currency", "years", "posted", "source", "link", "careers",
                                     "why", "gaps", "role_family")}
-    rec["fit"] = max(1, min(10, int(round(float(item.get("fit") or 0))))) if item.get("fit") else None
+    try:
+        rec["fit"] = max(1, min(10, int(round(float(item["fit"]))))) if item.get("fit") not in (None, "") else None
+    except (TypeError, ValueError):
+        rec["fit"] = None
+    for k in ("link", "careers"):  # only web links; the dashboard turns these into clickable links
+        if rec.get(k) and not str(rec[k]).lower().startswith(("https://", "http://")):
+            rec[k] = None
+    for k, v in list(rec.items()):
+        if v is not None and not isinstance(v, (str, int, float)):
+            rec[k] = str(v)
     rec["flags"] = _flags(item.get("flags"))
     if item.get("verified"):
         rec["flags"] = [f for f in rec["flags"] if f != "verified: full posting"] + ["verified: full posting"]

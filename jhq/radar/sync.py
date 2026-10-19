@@ -62,8 +62,15 @@ def row_for(lead, status, meta):
            "Job Family": lead.get("role_family"),
            "Notes": "Added from the Jobs tab (Applied click)."}
     if meta:
-        row.update({k: v for k, v in (meta.get("fields") or {}).items() if k in trk.HEADERS})
+        row.update({k: v for k, v in (meta.get("fields") or {}).items()
+                    if k in trk.HEADERS and k not in META_NEVER})
     return {k: v for k, v in row.items() if v not in (None, "")}
+
+
+# A package's tracker_meta.json describes the resume, never what happened to the application.
+META_NEVER = {"Application ID", "Company", "Job Title", "Status", "Date Applied", "Status Updated",
+              "Outcome Stage", "Final Outcome", "Callback Date", "First Interview Date", "Offer Date",
+              "Rejection Date", "Notes"}
 
 
 def backfill(paths, dry):
@@ -76,7 +83,7 @@ def backfill(paths, dry):
         if not m:
             continue
         fields = {k: v for k, v in (m.get("fields") or {}).items()
-                  if k in trk.HEADERS and k != "Application ID" and r.get(k) in (None, "")}
+                  if k in trk.HEADERS and k not in META_NEVER and r.get(k) in (None, "")}
         if fields:
             ups.append({"id": r["Application ID"], "fields": fields})
     if ups and not dry:

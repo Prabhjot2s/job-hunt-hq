@@ -24,6 +24,7 @@ from datetime import datetime, timedelta
 from urllib.parse import parse_qs, urlparse
 
 from .. import config
+from ..net import safe_get
 from . import feeds
 from .filters import Prefs
 
@@ -107,6 +108,8 @@ def parse_link(url):
 
 
 def board_stats(ats, slug, prefs: Prefs | None = None):
+    if ats not in feeds.FETCHERS or not feeds.valid_slug(ats, slug):
+        return {"ats": ats, "slug": slug, "ok": False, "error": "not a valid board name"}
     today = config.today()
     try:
         jobs = list(feeds.FETCHERS[ats](slug, today=today, cutoff=today - timedelta(days=30)))
@@ -161,8 +164,9 @@ def find(domain):
         f"https://{base}"]
     found, unsupported = {}, []
     for u in tries:
-        try:
-            r = feeds.S.get(u, timeout=12, headers={"Accept": "text/html", "User-Agent": BROWSER_UA})
+        try:  # public addresses only, re-checked on every redirect (the domain may come from the web)
+            r = safe_get(feeds.S, u, timeout=12, block_job_boards=False,
+                         headers={"Accept": "text/html", "User-Agent": BROWSER_UA})
         except Exception:  # noqa: BLE001
             continue
         text = r.url + " " + r.text[:800000]
@@ -232,6 +236,8 @@ def main(argv=None):
         added, skipped = [], []
         for n in new if isinstance(new, list) else [new]:
             n = {k: str(n.get(k) or "").strip() for k in FIELDS}
+            for k in ("company", "tier", "priority", "note"):  # never a spreadsheet formula
+                n[k] = n[k].lstrip("=+-@\t\r ")
             if n["ats"] not in feeds.FETCHERS or not feeds.valid_slug(n["ats"], n["slug"]) or not n["company"]:
                 skipped.append(f"{n['company'] or '?'}: bad ats/slug")
                 continue

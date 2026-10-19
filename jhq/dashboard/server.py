@@ -23,6 +23,7 @@ import argparse
 import datetime as dt
 import json
 import mimetypes
+import secrets
 import os
 import subprocess
 import sys
@@ -81,7 +82,10 @@ def leads_version():
 
 def _run_sync():
     try:
-        subprocess.run([sys.executable.replace("pythonw", "python"), "-m", "jhq", "radar", "sync"],
+        exe = Path(sys.executable)
+        if exe.name.lower().startswith("pythonw"):  # the console-less autostart interpreter
+            exe = exe.with_name(exe.name.lower().replace("pythonw", "python"))
+        subprocess.run([str(exe), "-m", "jhq", "radar", "sync"],
                        timeout=300, capture_output=True,
                        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     except Exception:  # noqa: BLE001  (retried on the next run)
@@ -100,13 +104,17 @@ def schedule_sync(delay=60):
     _sync_timer.start()
 
 
+def _list(v):
+    return [x for x in v if isinstance(x, str)] if isinstance(v, list) else []
+
+
 def save_lead_status(body):
     lid = str(body.get("id", ""))
     if lid not in {l.get("id") for l in config.read_json(P.leads, []) or []}:
         return False, "unknown lead"
     status = body.get("status")
-    reasons = [r for r in body.get("reasons", []) if r in SKIP_REASONS][:4]
-    likes = [r for r in body.get("like_reasons", []) if r in LIKE_REASONS][:6]
+    reasons = [r for r in _list(body.get("reasons")) if r in SKIP_REASONS][:4]
+    likes = [r for r in _list(body.get("like_reasons")) if r in LIKE_REASONS][:6]
     with _status_lock:
         allst = config.read_json(P.lead_status, {}) or {}
         cur = allst.get(lid, {})
@@ -126,12 +134,26 @@ def save_lead_status(body):
     return True, cur
 
 
+def _under(path, root):
+    return os.path.commonpath([path, root]) == root
+
+
 def inside_root(p):
+    """True only for paths inside the data folder.
+
+    Checked as plain text FIRST: any web page can make your browser request
+    /file?path=\\\\attacker\\share (e.g. with an <img> tag), and touching such a path on Windows
+    would send the attacker your hashed login. Only after the text check passes are links and
+    junctions resolved and checked again."""
     try:
-        real = os.path.realpath(p)
-        root = os.path.realpath(P.root)
-        return os.path.commonpath([real, root]) == root
-    except (ValueError, TypeError):
+        if not isinstance(p, str) or not p or "\x00" in p:
+            return False
+        root = os.path.normcase(os.path.abspath(P.root))
+        if not _under(os.path.normcase(os.path.abspath(p)), root):  # no filesystem access yet
+            return False
+        real_root = os.path.normcase(os.path.realpath(P.root))
+        return _under(os.path.normcase(os.path.realpath(p)), real_root)
+    except (ValueError, TypeError, OSError):
         return False
 
 
@@ -160,11 +182,16 @@ SECURITY_HEADERS = {
     "Referrer-Policy": "no-referrer",
     "Cross-Origin-Resource-Policy": "same-origin",
     "Cross-Origin-Opener-Policy": "same-origin",
-    "Content-Security-Policy": ("default-src 'self'; script-src 'self' 'unsafe-inline'; "
-                                "style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
-                                "connect-src 'self'; frame-ancestors 'none'; form-action 'none'; "
-                                "base-uri 'none'; object-src 'none'"),
+    "Content-Security-Policy": ("default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; "
+                                "img-src 'self' data:; frame-ancestors 'none'; form-action 'none'; "
+                                "base-uri 'none'"),
 }
+# The page itself gets a per-response nonce: only its own <script> runs. Text from job postings is
+# HTML-escaped on render, and even if something slipped through, injected scripts or onerror=
+# handlers would be blocked.
+PAGE_CSP = ("default-src 'none'; script-src 'nonce-{nonce}'; style-src 'unsafe-inline'; "
+            "img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; form-action 'none'; "
+            "base-uri 'none'")
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -203,7 +230,10 @@ class Handler(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         q = parse_qs(u.query)
         if u.path in ("/", "/index.html"):
-            return self._send(200, (HERE / "index.html").read_bytes(), "text/html; charset=utf-8")
+            nonce = secrets.token_urlsafe(18)
+            page = (HERE / "index.html").read_text(encoding="utf-8").replace("<script>", f'<script nonce="{nonce}">')
+            return self._send(200, page, "text/html; charset=utf-8",
+                              {"Content-Security-Policy": PAGE_CSP.format(nonce=nonce)})
         if u.path == "/api/version":
             _, mtime, err = load_tracker()
             return self._json({"mtime": mtime, "error": err, "lmtime": leads_version()})

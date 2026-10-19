@@ -27,6 +27,7 @@ import datetime as dt
 import io
 import json
 import os
+import re
 import shutil
 import time
 from contextlib import contextmanager
@@ -130,7 +131,11 @@ def write_lock(path: Path, timeout=30):
             os.close(fd)
             break
         except FileExistsError:
-            if time.time() - lock.stat().st_mtime > 300:  # stale lock from a crashed run
+            try:
+                stale = time.time() - lock.stat().st_mtime > 300  # left over from a crashed run
+            except FileNotFoundError:
+                continue  # the other writer just finished
+            if stale:
                 lock.unlink(missing_ok=True)
                 continue
             if time.time() - start > timeout:
@@ -256,12 +261,14 @@ def _coerce(header, value):
         except ValueError as e:
             raise TrackerError(f"{header}: '{value}' is not a date (use YYYY-MM-DD, today, yesterday)") from e
     if kind == "pct":
-        if isinstance(value, str):
-            v = value.strip().rstrip("%")
-            value = float(v) / (100 if value.strip().endswith("%") or float(v) > 1 else 1)
-        value = float(value)
-        if value > 1:
+        try:
+            value = float(str(value).strip().rstrip("%")) if isinstance(value, str) else float(value)
+        except (TypeError, ValueError) as e:
+            raise TrackerError(f"{header}: '{value}' is not a percentage (use 0.82 or 82%)") from e
+        if value > 1:  # "82" or "82%" -> 0.82
             value /= 100
+        if not 0 <= value <= 1:
+            raise TrackerError(f"{header}: '{value}' is outside 0-100%")
         return round(value, 4)
     if kind == "number":
         if isinstance(value, str):
@@ -270,6 +277,8 @@ def _coerce(header, value):
                 return float(s) if "." in s else int(s)
             except ValueError as e:
                 raise TrackerError(f"{header}: '{value}' is not a number") from e
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise TrackerError(f"{header}: '{value}' is not a number")
         return value
     if kind.startswith("list:"):
         allowed = LISTS[kind[5:]]
@@ -277,12 +286,23 @@ def _coerce(header, value):
         if not match:
             raise TrackerError(f"{header}: '{value}' is not one of {allowed}")
         return match
-    return str(value)
+    return clean_text(str(value))
+
+
+CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
+
+
+def clean_text(s: str) -> str:
+    """Drop invisible control characters (they corrupt .xlsx files)."""
+    return CONTROL.sub("", s)
 
 
 def _write_cell(ws, r, header, value):
     c = ws.cell(r, HEADERS.index(header) + 1, value)
     kind = KIND[header]
+    if isinstance(value, str) and value.startswith("="):
+        # Text from job postings must never become a live formula (=HYPERLINK(...) could leak data).
+        c.data_type = "s"
     if kind == "date" and value is not None:
         c.number_format = "yyyy-mm-dd"
     elif kind == "pct" and value is not None:
@@ -379,7 +399,7 @@ def update(updates: list[dict], paths=None, allow_protected=False) -> dict:
             if note_add:
                 ci = HEADERS.index("Notes") + 1
                 cur = ws.cell(r, ci).value
-                ws.cell(r, ci, f"{cur}; {note_add}" if cur else note_add)
+                _write_cell(ws, r, "Notes", clean_text(f"{cur}; {note_add}" if cur else str(note_add)))
             out.append({"id": app_id, **{h: _fmt(v) for h, v in coerced.items()},
                         **({"Notes+": note_add} if note_add else {})})
         _save(wb, path)
@@ -397,7 +417,7 @@ def event(app_id: str, name: str, date=None, note=None, paths=None) -> dict:
         raise TrackerError(f"No row {app_id}.")
     fields = {k: v for k, v in spec.items() if not k.startswith("_")}
     fields["Status Updated"] = day.isoformat()
-    if spec.get("_date") and (date or not current.get(spec["_date"])):
+    if spec.get("_date") and not current.get(spec["_date"]):  # fill blanks only; never move a recorded date
         fields[spec["_date"]] = day.isoformat()
     if spec.get("_callback") and not current.get("Callback Date"):
         fields["Callback Date"] = day.isoformat()

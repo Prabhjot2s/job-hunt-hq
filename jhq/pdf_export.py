@@ -34,17 +34,18 @@ def _soffice() -> str | None:
 
 
 def _word_windows(docx: Path, pdf: Path):
-    d = str(docx.resolve()).replace("'", "''")
-    p = str(pdf.resolve()).replace("'", "''")
+    # Paths go in through environment variables, never into the script text: folder names come
+    # from job titles, and PowerShell treats curly quotes (’) as quote marks too.
     ps = (
         "$ErrorActionPreference='Stop';"
         "$w=New-Object -ComObject Word.Application;$w.Visible=$false;$w.DisplayAlerts=0;"
-        f"try{{$doc=$w.Documents.Open('{d}',$false,$true);"
-        f"$doc.ExportAsFixedFormat('{p}',17);$doc.Close($false)}}"
+        "try{$doc=$w.Documents.Open($env:JHQ_DOCX,$false,$true);"
+        "$doc.ExportAsFixedFormat($env:JHQ_PDF,17);$doc.Close($false)}"
         "finally{$w.Quit();[void][Runtime.InteropServices.Marshal]::ReleaseComObject($w)}"
     )
+    env = {**os.environ, "JHQ_DOCX": str(docx.resolve()), "JHQ_PDF": str(pdf.resolve())}
     res = subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", ps],
-                         capture_output=True, text=True, timeout=180)
+                         capture_output=True, text=True, timeout=180, env=env)
     if res.returncode != 0 or not pdf.exists():
         raise ExportError(res.stderr.strip()[-400:] or "Word export failed")
 

@@ -66,7 +66,9 @@ tracker_meta.json.)
 | no reply for a long time (user decides) | `event <id> no-response` or the `age` batch |
 | they withdrew | `event <id> withdrawn` |
 | paused | `event <id> on-hold` |
-Use the date they give (`--date`); events never clear earlier callback/interview dates.
+Use the date they give (`--date`). Events only fill empty date cells: they never clear or move an
+earlier callback/interview date (a second interview keeps the first one's date). To correct a date,
+use `tracker update` with that column.
 
 ## Aging (no-response batch)
 Eligible: Status Applied/On Hold, Final Outcome Pending, no callback/interview/offer/rejection date,

@@ -176,8 +176,14 @@ def main(argv=None):
     config.write_json(out, {"stats": stats, "errors": errors, "jobs": keep})
     if not a.dry_run:
         state["last_run"][scope] = today.isoformat()
+        keep_from = (today - timedelta(days=120)).isoformat()  # forget postings older than ~4 months
+        seen = {k: v for k, v in seen.items() if v >= keep_from}
+        reported = {k: v for k, v in reported.items() if v >= keep_from}
         config.write_json(paths.seen, {"seen": seen, "baselined": sorted(baselined), "reported": reported,
                                        "last_run": state["last_run"]}, indent=None)
+        old_runs = sorted(paths.runs.glob("candidates_*.json"))[:-60]  # keep the last 60 run files
+        for f in old_runs:
+            f.unlink(missing_ok=True)
     if a.auto_add and keep:
         from . import leads as leads_mod
         skill_rx = skill_patterns(paths)

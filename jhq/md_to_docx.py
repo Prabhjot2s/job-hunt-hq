@@ -28,6 +28,7 @@ def convert(md_text, out):
     s.left_margin = s.right_margin = Inches(0.8)
     st = doc.styles["Normal"]
     st.font.name, st.font.size = bp.FONT, Pt(SIZE)
+    md_text = bp.clean(md_text)
     md_text = re.sub(r"`([^`\n]+)`", r"\1", md_text)
     md_text = re.sub(r"(?<![*\w])\*([^*\s][^*\n]*?)\*(?![*\w])", r"\1", md_text)
     lines = md_text.splitlines()

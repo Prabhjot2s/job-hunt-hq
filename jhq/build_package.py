@@ -76,6 +76,14 @@ DEFAULT_ORDER = ["summary", "experience", "skills", "education", "certifications
 
 
 # ---------- docx helpers ----------
+CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
+
+
+def clean(text):
+    """Drop invisible control characters: Word files can't contain them (job postings sometimes do)."""
+    return CONTROL.sub("", str(text))
+
+
 def set_font(run, size=None, bold=None, font=None):
     font = font or FONT
     run.font.name = font
@@ -110,7 +118,7 @@ def runs_from_markup(p, text, size, allow_bold=True):
             add_hyperlink(p, m.group(1), m.group(2), size)
             continue
         bold = part.startswith("**") and part.endswith("**")
-        set_font(p.add_run(part[2:-2] if bold else part), size, bold and allow_bold)
+        set_font(p.add_run(clean(part[2:-2] if bold else part)), size, bold and allow_bold)
 
 
 def add_hyperlink(p, text, url, size):
@@ -130,7 +138,7 @@ def add_hyperlink(p, text, url, size):
     for el in (fonts, color, u, sz):
         rpr.append(el)
     r.append(rpr)
-    t = OxmlElement("w:t"); t.text = text
+    t = OxmlElement("w:t"); t.text = clean(text)
     t.set(qn("xml:space"), "preserve")
     r.append(t)
     h.append(r)
@@ -163,7 +171,7 @@ def setup(doc, size, margins):
 def heading(doc, text, sz):
     p = doc.add_paragraph()
     set_para(p, before=sz["heading_before"], after=2)
-    set_font(p.add_run(text.upper()), sz["heading"], True)
+    set_font(p.add_run(clean(text.upper())), sz["heading"], True)
     add_rule(p)
     p.paragraph_format.keep_with_next = True
     return p
@@ -182,7 +190,7 @@ def plain(doc, chunks, size, before=0, after=0, line=1.0, align=None):
     p = doc.add_paragraph()
     set_para(p, before=before, after=after, line=line, align=align)
     for text, bold in chunks:
-        set_font(p.add_run(text), size, bold)
+        set_font(p.add_run(clean(text)), size, bold)
     return p
 
 
@@ -237,8 +245,8 @@ def build_resume(spec, prof, path):
             set_para(p, after=sz["bullet_after"], line=sz["bullet_line"])
             p.paragraph_format.left_indent = Inches(0.22)
             p.paragraph_format.first_line_indent = Inches(-0.14)
-            set_font(p.add_run(f"{label}: "), sz["skills"], True)
-            set_font(p.add_run(items.replace("**", "")), sz["skills"], False)
+            set_font(p.add_run(clean(f"{label}: ")), sz["skills"], True)
+            set_font(p.add_run(clean(items.replace("**", ""))), sz["skills"], False)
 
     def education():
         if not spec.get("education"):
@@ -304,7 +312,7 @@ def build_jd(spec, title, path, spec_dir):
         p = doc.add_paragraph()
         set_para(p, after=2)
         if line:
-            set_font(p.add_run(line), 10.5)
+            set_font(p.add_run(clean(line)), 10.5)
     doc.save(path)
 
 
@@ -604,7 +612,8 @@ def run(spec_path, overwrite=False, qa_only=False, qa_dir=None, paths=None):
 
 def main(argv=None):
     config.utf8_console()
-    ap = argparse.ArgumentParser(prog="jhq build", description="Build and check an application package.")
+    ap = argparse.ArgumentParser(prog="jhq build", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("spec")
     ap.add_argument("--overwrite", action="store_true")
     ap.add_argument("--qa-only", action="store_true")

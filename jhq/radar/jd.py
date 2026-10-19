@@ -13,51 +13,20 @@ employer's own posting ("<company> <title> careers") and run this on that URL in
 """
 from __future__ import annotations
 
-import ipaddress
 import json
 import re
-import socket
 import sys
 from urllib.parse import parse_qs, urlparse
 
-import requests
-
 from .. import config
+from ..net import check_url as _check_url
+from ..net import safe_get
 from .feeds import S, T, clean, excerpt, salary_hints, years_hint, years_lines
-
-BLOCKED_HOSTS = ("linkedin.com", "indeed.", "ziprecruiter.", "glassdoor.")
-
-
-def _public_host(host):
-    """Refuse localhost / private-network URLs (a pasted link shouldn't reach your router)."""
-    try:
-        for info in socket.getaddrinfo(host, None):
-            ip = ipaddress.ip_address(info[4][0])
-            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
-                return False
-        return True
-    except (socket.gaierror, ValueError):
-        return False
-
-
-def _check_url(url):
-    u = urlparse(url)
-    if u.scheme not in ("http", "https") or not u.hostname or not _public_host(u.hostname):
-        raise ValueError(f"not a public web address: {url}")
-    if any(b in u.hostname for b in BLOCKED_HOSTS):
-        raise ValueError(f"{u.hostname} blocks scripts; find the employer's own posting instead")
 
 
 def get(url, **kw):
     """GET that re-checks every redirect hop, so a link can't bounce into your local network."""
-    for _ in range(6):
-        _check_url(url)
-        r = S.get(url, timeout=T, allow_redirects=False, **kw)
-        if r.is_redirect and r.headers.get("Location"):
-            url = requests.compat.urljoin(url, r.headers["Location"])
-            continue
-        return r
-    raise ValueError("too many redirects")
+    return safe_get(S, url, timeout=T, **kw)
 
 
 def workday(u):

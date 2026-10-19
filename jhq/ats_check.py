@@ -235,7 +235,8 @@ def print_table(rep):
 
 def main(argv=None):
     config.utf8_console()
-    ap = argparse.ArgumentParser(prog="jhq ats", description="Measured ATS check of a resume PDF.")
+    ap = argparse.ArgumentParser(prog="jhq ats", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("pdf")
     ap.add_argument("--keywords", help="JSON file: {required: [...], preferred: [...]} or a build spec")
     ap.add_argument("--dump", help="write each parser's raw text here")

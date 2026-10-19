@@ -732,8 +732,8 @@ function renderSkills(){
         ${Object.values(LVL).map(([l,c])=>`<span class="lvl" style="border-color:${c};color:${c}">${l}</span>`).join(" ")}
       </div>
       <div style="overflow-x:auto"><table class="hm"><thead><tr>
-        <th class="l">Skill</th><th>You</th><th>All JDs<br><span class="faint">n=${d.jds}</span></th>
-        ${d.families.map(f=>`<th title="${esc(f.family)}">${esc(f.family.replace(" / ","/"))}<br><span class="faint">n=${f.jds}</span></th>`).join("")}
+        <th class="l">Skill</th><th>You</th><th>All JDs<br><span class="faint">n=${+d.jds||0}</span></th>
+        ${d.families.map(f=>`<th title="${esc(f.family)}">${esc(f.family.replace(" / ","/"))}<br><span class="faint">n=${+f.jds||0}</span></th>`).join("")}
         <th class="l" style="min-width:110px">Gap score</th><th title="callbacks among applications whose JD asked for it">Callbacks</th>
       </tr></thead><tbody>
       ${list.map(s=>{ const [ll,lc]=LVL[s.level];
@@ -741,8 +741,8 @@ function renderSkills(){
           <td><span class="lvl" style="border-color:${lc};color:${lc}">${ll}</span></td>
           <td class="c" style="${heat(s.demand_pct)}">${Math.round(s.demand_pct)}%</td>
           ${fams.map(f=>{ const p=s.by_family[f]||0; return `<td class="c" style="${heat(p)}">${p?Math.round(p)+"%":"·"}</td>`; }).join("")}
-          <td class="l"><div class="gapbar" style="width:${Math.max(2,s.gap_score/maxGap*100)}%;${s.gap_score?"":"opacity:0"}"></div><span class="faint" style="font-size:11px">${s.gap_score}</span></td>
-          <td class="c faint">${s.applied_with_skill?`${s.positive_with_skill}/${s.applied_with_skill}`:"—"}</td></tr>`; }).join("")}
+          <td class="l"><div class="gapbar" style="width:${Math.max(2,s.gap_score/maxGap*100)}%;${s.gap_score?"":"opacity:0"}"></div><span class="faint" style="font-size:11px">${+s.gap_score||0}</span></td>
+          <td class="c faint">${s.applied_with_skill?`${+s.positive_with_skill||0}/${+s.applied_with_skill||0}`:"—"}</td></tr>`; }).join("")}
       </tbody></table></div>
       <div class="note">${esc(d.note)} Your level comes from confirmed experience only (profile/skill_taxonomy.json); it changes only when you confirm new experience.</div>
     </div>`;
@@ -900,10 +900,10 @@ function leadCard(l, rank){
     l.tier ? `<span class="tag">${esc(l.tier)}</span>` : "",
     ...(l.flags||[]).filter(x=>!/^★|^verified: full posting$/.test(x)).map(x=>`<span class="tag mid">${esc(x)}</span>`)
   ].join("");
-  const skipUI = J.skipOpen===l.id ? `<div class="reasons"><span>Why? (optional, 1 click)</span>${SKIP_R.map(r=>`<button data-skipr="${esc(r)}" data-id="${l.id}">${esc(r)}</button>`).join("")}<button data-skipr="" data-id="${l.id}">Just skip</button></div>` : "";
-  const likeUI = J.likeOpen===l.id ? `<div class="reasons"><span>What do you like? (optional)</span>${LIKE_R.map(r=>`<button class="${(s.like_reasons||[]).includes(r)?"on":""}" data-liker="${esc(r)}" data-id="${l.id}">${esc(r)}</button>`).join("")}<button data-likedone="1">Done</button></div>` : "";
+  const skipUI = J.skipOpen===l.id ? `<div class="reasons"><span>Why? (optional, 1 click)</span>${SKIP_R.map(r=>`<button data-skipr="${esc(r)}" data-id="${esc(l.id)}">${esc(r)}</button>`).join("")}<button data-skipr="" data-id="${esc(l.id)}">Just skip</button></div>` : "";
+  const likeUI = J.likeOpen===l.id ? `<div class="reasons"><span>What do you like? (optional)</span>${LIKE_R.map(r=>`<button class="${(s.like_reasons||[]).includes(r)?"on":""}" data-liker="${esc(r)}" data-id="${esc(l.id)}">${esc(r)}</button>`).join("")}<button data-likedone="1">Done</button></div>` : "";
   const op = OPENED[l.id];
-  return `<div class="card lead ${rank?"pick":""} ${op?"opened":"unopened"}" data-lid="${l.id}">${rank?`<span class="rank">#${rank}</span>`:""}
+  return `<div class="card lead ${rank?"pick":""} ${op?"opened":"unopened"}" data-lid="${esc(l.id)}">${rank?`<span class="rank">#${rank}</span>`:""}
     <div class="fitbox" style="--c:${c}">${f||"?"}<small>FIT</small></div>
     <div style="min-width:0">
       <div class="lt">${link?`<a class="ti" href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(l.title)} ↗</a>`:`<span class="ti">${esc(l.title)}</span>`}
@@ -913,11 +913,11 @@ function leadCard(l, rank){
       ${l.gaps?`<div class="why gap"><b>Gap</b>${esc(l.gaps)}</div>`:""}
       <div class="lacts">
         ${link?`<a class="btn" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Open posting</a>`:""}
-        <button class="btn primary" data-lapply="${l.id}">✓ Applied</button>
-        <button class="btn ${s.status==="Interested"?"on-int":""}" data-lint="${l.id}">${s.status==="Interested"?"★ Interested":"☆ Interested"}</button>
-        <button class="btn ${s.liked?"on-like":""}" data-llike="${l.id}">${s.liked?"♥ More like this":"♡ More like this"}</button>
-        <button class="btn" data-lcopy="${l.id}" title="Copies a request you can paste to Claude">Copy “tailor this”</button>
-        <button class="btn ghost" data-lskip="${l.id}">✕ Skip</button>
+        <button class="btn primary" data-lapply="${esc(l.id)}">✓ Applied</button>
+        <button class="btn ${s.status==="Interested"?"on-int":""}" data-lint="${esc(l.id)}">${s.status==="Interested"?"★ Interested":"☆ Interested"}</button>
+        <button class="btn ${s.liked?"on-like":""}" data-llike="${esc(l.id)}">${s.liked?"♥ More like this":"♡ More like this"}</button>
+        <button class="btn" data-lcopy="${esc(l.id)}" title="Copies a request you can paste to Claude">Copy “tailor this”</button>
+        <button class="btn ghost" data-lskip="${esc(l.id)}">✕ Skip</button>
         <span class="faint" style="font-size:12px;margin-left:auto">${esc(l.source||"")} · found ${esc(fmtDate(l.found))}</span>
       </div>${skipUI}${likeUI}
     </div></div>`;
@@ -973,7 +973,7 @@ function renderJobs(){
     <div class="jl">${G.more.map(l=>leadCard(l,0)).join("") || `<div class="card pad faint">Nothing here.</div>`}</div></details>
   ${handled.length ? `<details class="jsec"><summary>Handled this week <span class="cnt">${handled.length}</span></summary><div class="card">${handled.map(l=>{ const s=leadState(l.id), sy=LD.synced[l.id];
       const st = s.status==="Applied" ? (sy?`<span class="tag ok">In tracker ✓</span>`:`<span class="tag mid">Adding to tracker…</span>`) : `<span class="tag">Skipped${(s.reasons||[]).length?" · "+esc(s.reasons.join(", ")):""}</span>`;
-      return `<div class="hrow"><div><b>${esc(l.company)}</b> — ${esc(l.title)}<div class="s">${esc(fmtDate(String(s.at).slice(0,10)))}</div></div>${st}${sy?"<span></span>":`<button class="btn ghost" data-lundo="${l.id}">Undo</button>`}</div>`; }).join("")}</div></details>` : ""}
+      return `<div class="hrow"><div><b>${esc(l.company)}</b> — ${esc(l.title)}<div class="s">${esc(fmtDate(String(s.at).slice(0,10)))}</div></div>${st}${sy?"<span></span>":`<button class="btn ghost" data-lundo="${esc(l.id)}">Undo</button>`}</div>`; }).join("")}</div></details>` : ""}
   ${rv ? `<div class="card review"><h2>What the radar learned <small>week of ${esc(rv.week||"")}</small></h2>
       ${rv.summary?`<div class="muted">${esc(rv.summary)}</div>`:""}
       ${(rv.applied_changes||[]).length?`<h4 style="margin:12px 0 0;font-size:12px;text-transform:uppercase;color:var(--ink3)">Changed automatically</h4><ul>${rv.applied_changes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}

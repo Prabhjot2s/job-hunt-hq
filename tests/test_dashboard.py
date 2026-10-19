@@ -86,3 +86,33 @@ def test_open_folder_is_confined(srv, tmp_path):
 def test_other_methods_refused(srv):
     for m in ("PUT", "DELETE", "OPTIONS"):
         assert call(srv, m, "/api/data")[0] == 405
+
+
+def test_page_scripts_need_the_nonce(srv):
+    status, body, headers = call(srv, "GET", "/")
+    csp = headers["Content-Security-Policy"]
+    assert "unsafe-inline" not in csp.split("script-src")[1].split(";")[0]
+    nonce = csp.split("'nonce-")[1].split("'")[0]
+    assert f'<script nonce="{nonce}">'.encode() in body
+    _, _, h2 = call(srv, "GET", "/")
+    assert h2["Content-Security-Policy"] != csp  # a new nonce per page load
+
+
+def test_network_paths_are_refused_without_touching_them(srv, data, monkeypatch):
+    import os
+    touched = []
+    real = os.path.realpath
+    monkeypatch.setattr(os.path, "realpath", lambda p, *a, **k: touched.append(p) or real(p, *a, **k))
+    unc = "\\\\attacker.example\\share\\x.pdf"  # \\attacker.example\share\x.pdf
+    assert unc.startswith("\\\\")
+    for p in (unc, "//attacker.example/share/x.pdf"):
+        assert server.inside_root(p) is False
+    assert not any("attacker" in str(t) for t in touched)
+    assert call(srv, "GET", "/file?path=%5C%5Cattacker.example%5Cshare%5Cx.pdf")[0] == 404
+
+
+def test_lead_status_ignores_wrong_types(srv, data):
+    h = post_headers(srv)
+    body = json.dumps({"id": "abc123def456", "status": "Skipped", "reasons": "Low pay", "like_reasons": 5})
+    assert call(srv, "POST", "/api/lead-status", body, h)[0] == 200
+    assert config.read_json(data.lead_status)["abc123def456"]["reasons"] == []

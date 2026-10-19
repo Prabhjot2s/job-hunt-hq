@@ -25,6 +25,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
 
 from . import __version__, config
 
@@ -114,6 +115,11 @@ def cmd_doctor(_argv):
             base = prof.get("base_resume")
             line(bool(base) and (p.root / base).exists() if base else None, "base resume", base or "not added yet")
             line(p.tracker.exists(), "tracker", str(p.tracker))
+            prefs = config.read_json(p.prefs, {}) or {}
+            areas = [m for a in prefs.get("areas", []) for m in a.get("match", [])]
+            set_up = bool(prefs.get("country")) and areas and areas != ["your city"]
+            line(True if set_up else None, "radar preferences",
+                 "set" if set_up else "country/areas not set yet (setup step 6)")
             from .radar.companies import load
             n = len(load(p))
             line(True if n else None, "radar companies", f"{n} listed" if n else "none yet (optional)")
@@ -133,6 +139,11 @@ def _pythonw():
     return w if w.exists() else exe
 
 
+def desktop_escape(path: str) -> str:
+    """Quote a path for a .desktop Exec line (inside double quotes)."""
+    return path.replace("\\", "\\\\").replace('"', '\\"').replace("`", "\\`").replace("$", "\\$").replace("%", "%%")
+
+
 def autostart(state: str, dry=False) -> str:
     """Start the dashboard when you log in (on) or stop doing that (off)."""
     if sys.platform == "win32":
@@ -147,13 +158,13 @@ def autostart(state: str, dry=False) -> str:
                 '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
                 '<plist version="1.0"><dict>\n'
                 '<key>Label</key><string>com.jobhunthq.dashboard</string>\n'
-                f'<key>ProgramArguments</key><array><string>{sys.executable}</string><string>-m</string>'
+                f'<key>ProgramArguments</key><array><string>{xml_escape(sys.executable)}</string><string>-m</string>'
                 '<string>jhq</string><string>dashboard</string><string>--quiet</string></array>\n'
                 '<key>RunAtLoad</key><true/>\n</dict></plist>\n')
     else:
         target = Path.home() / ".config/autostart/job-hunt-hq.desktop"
         body = ("[Desktop Entry]\nType=Application\nName=Job Hunt HQ dashboard\n"
-                f"Exec=\"{sys.executable}\" -m jhq dashboard --quiet\nX-GNOME-Autostart-enabled=true\n")
+                f"Exec=\"{desktop_escape(sys.executable)}\" -m jhq dashboard --quiet\nX-GNOME-Autostart-enabled=true\n")
     if dry:
         return f"{target}\n---\n{body}"
     if state == "on":
