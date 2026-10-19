@@ -8,7 +8,7 @@
     jhq md2docx in.md out.docx                        markdown -> Word (prep packs, plans)
     jhq tracker ...                                   the application tracker (see jhq tracker -h)
     jhq skillgap [--print]                            skill-gap heatmap data
-    jhq radar run|sync                                daily job radar / copy Applied clicks
+    jhq radar run|sync|stats|learn                    daily radar, Applied sync, run health, learned rules
     jhq leads ...                                     the Jobs-tab lead store
     jhq companies ...                                 the radar's company list
     jhq jd <url>                                      read a full job posting
@@ -219,7 +219,13 @@ def main(argv=None):
         if sub == "sync":
             from .radar import sync
             return sync.main(rest[1:])
-        raise SystemExit("Use: jhq radar run | jhq radar sync")
+        if sub == "stats":
+            from .radar import stats
+            return stats.main(rest[1:])
+        if sub == "learn":
+            from .radar import learn
+            return learn.main(rest[1:])
+        raise SystemExit("Use: jhq radar run | sync | stats | learn")
     modules = {"demo": "demo", "build": "build_package", "ats": "ats_check", "md2docx": "md_to_docx", "tracker": "tracker",
                "skillgap": "skill_gap", "leads": "radar.leads", "companies": "radar.companies", "jd": "radar.jd"}
     if cmd not in modules:

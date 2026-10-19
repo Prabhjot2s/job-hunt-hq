@@ -109,8 +109,11 @@ the trade-off:
 1. **Claude runs it (best results):** if scheduled-task tools are available in this app (for example
    the Claude desktop app's scheduled tasks), create a task named `job-radar-daily` at their times with
    the prompt: "Use the job-radar skill: run my daily job radar." Mention it uses their Claude plan's
-   usage. Optional second task `job-radar-weekly-review` (Sunday) with "Use the job-radar skill: do the
-   weekly review and discovery sweep."
+   usage. Recommend a second task, `job-radar-weekly-review` (e.g. Sunday 11 AM), with the prompt
+   "Use the job-radar skill: do the weekly review." Explain why: it reads their Applied / Skip / Like
+   clicks (with the reasons) and their outcomes, writes learned scoring rules that every daily run then
+   applies, fixes broken company feeds, and posts suggestions on the dashboard for them to approve.
+   This is what makes the radar get better every week.
 2. **Free, rules-only:** the computer runs `{{JHQ}} radar run --auto-add` on a timer (no Claude usage;
    leads get a simple rules-based fit score and Claude can review them later). Only with their OK,
    create it. `<python>` is the `python` value from `{{JHQ}} where`; keep the quotes, paths often
@@ -121,6 +124,9 @@ the trade-off:
    - macOS/Linux: add this line with `crontab -e` (show it to them first):
      `0 17 * * 1-5 "<python>" -m jhq radar run --auto-add >/dev/null 2>&1`
 3. **By hand:** they say "run my job radar" whenever they like.
+
+With options 2 and 3 there is no automatic weekly review (it needs Claude). Tell them to say "do the
+weekly review" once a week, ideally after a few days of clicking Applied / Skip / Like on the dashboard.
 
 ## Step 9: Dashboard and connectors
 1. Start it: `{{JHQ}} dashboard --open` (run in the background; it serves http://127.0.0.1:8765, local

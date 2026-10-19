@@ -54,9 +54,23 @@ tracker; with the Indeed or Dice connectors the radar also searches those boards
    (or let it read your Gmail, if you connected it), and the tracker and pipeline update. Ask "prep me
    for Globex" and you get an interview prep pack.
 
-Your skips and likes on the dashboard (with one-click reasons like "too senior" or "low pay") feed into
-how Claude scores new jobs, and an optional weekly review suggests changes: new companies to watch,
-titles to drop, a different pay floor.
+## It learns what you want
+
+Every click on the Jobs tab is feedback: **Applied**, **Skip** with a one-click reason ("too senior",
+"low pay", "on-site", "wrong role"…) and **More like this** with what you liked ("remote", "pay",
+"role type"…). Once a week (a scheduled Sunday run, or when you say "do the weekly review"), Claude:
+
+- **reads the week:** every job you applied to, skipped or liked and why, which applications got
+  replies, which job feeds broke;
+- **writes learned rules** that every daily run then applies, each with its evidence, for example
+  *"6 of 9 skips were 'too senior' on roles asking 4+ years: score those lower"* (up to 5 changes a
+  week; old rules are removed when the evidence no longer supports them);
+- **fixes broken company feeds** when a company moved its job board;
+- **suggests bigger changes for you to approve:** new companies similar to the ones you liked, titles
+  to drop, a different pay floor, a skill that's suddenly asked for everywhere.
+
+The summary shows up on the dashboard as "What the radar learned". The more you click, the better the
+shortlist fits.
 
 ## How it works
 

@@ -18,9 +18,11 @@ Before judging anything read `<data>/radar/preferences.json`, `<data>/profile/fa
 `<data>/profile/profile.json`. The full playbook is `references/playbook.md`.
 
 ## Daily run (in order)
-1. **Housekeeping:** `{{JHQ}} radar sync` (copies dashboard "Applied" clicks into the tracker; harmless
-   when there's nothing). `{{JHQ}} leads feedback` and use it when scoring today (many "Too senior"
-   skips = score high-years roles lower; liked remote startups = score similar ones higher).
+1. **Housekeeping and what you've learned:** `{{JHQ}} radar sync` (copies dashboard "Applied" clicks
+   into the tracker; harmless when there's nothing). Then `{{JHQ}} radar learn list`: these dated
+   **learned rules** come from past weekly reviews and you MUST apply them when scoring today (e.g.
+   "cap 4+ year roles at fit 6", "+1 for remote ops roles"). Also skim `{{JHQ}} leads feedback --days 7`
+   for anything newer than the last review.
 2. **Email outcomes (only if the Gmail connector is connected):** follow job-hunt Workflow E. For an
    interview invite on a tracked application, build the prep pack (job-hunt Workflow F, no questions).
 3. **Company feeds:** `{{JHQ}} radar run`. Read the candidates JSON it prints last. Each job has
@@ -32,9 +34,9 @@ Before judging anything read `<data>/radar/preferences.json`, `<data>/profile/fa
 5. **Job-alert emails (optional, Gmail):** read LinkedIn/Indeed job-alert emails from the window. Never
    log in to or browse LinkedIn; find each role on the employer's own site ("<company> <title> careers")
    and read that.
-6. **Judge** every candidate with the rules in `references/playbook.md` (hard drops first, then fit 1-10,
-   verdict, why, gaps). Verify the best ones from the full posting: `{{JHQ}} jd <url>` (add
-   `verified: true` only when pay, years and work mode are all known).
+6. **Judge** every candidate with the rules in `references/playbook.md` (hard drops first, then fit 1-10
+   adjusted by the learned rules, verdict, why, gaps). Verify the best ones from the full posting:
+   `{{JHQ}} jd <url>` (add `verified: true` only when pay, years and work mode are all known).
 7. **Save:** write the kept leads to a JSON list and `{{JHQ}} leads add leads.json`. They appear on the
    dashboard's Jobs tab (http://127.0.0.1:8765).
 8. **Summary** for the user: email outcomes first (interview invites need action), then counts, the top
@@ -44,5 +46,7 @@ Before judging anything read `<data>/radar/preferences.json`, `<data>/profile/fa
 - **"Review my leads" / re-score rules-scored leads:** leads with `scored_by: rules` came from an
   automatic run. Judge them like step 6 and `{{JHQ}} leads update changes.json`.
 - **Add/remove companies, find new ones:** `references/playbook.md` "Discovery".
-- **Weekly review:** `references/playbook.md` "Weekly review".
+- **Weekly review** ("do the weekly review", or the weekly scheduled task): `references/playbook.md`
+  "Weekly review". This is how the radar gets better: it turns the user's clicks and outcomes into
+  learned rules and suggestions.
 - **Change preferences:** edit preferences.json with the user (or use job-hunt-setup step 6).

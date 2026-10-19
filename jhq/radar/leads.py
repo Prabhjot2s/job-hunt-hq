@@ -118,25 +118,43 @@ def update_leads(items, paths):
     return changed
 
 
+def _row(l):
+    """One line per lead: enough for Claude to see patterns (family, mode, pay, years, fit)."""
+    return " | ".join(str(x) for x in (
+        l.get("company"), l.get("title"), l.get("role_family") or "-", l.get("work_mode") or "-",
+        l.get("salary") or "-", f"years {l.get('years', '?')}", f"fit {l.get('fit', '?')}",
+        l.get("scored_by", "claude")))
+
+
 def feedback(paths, days=30):
+    """What the user did with the leads: counts, reasons, and every applied / liked / skipped lead."""
     status = config.read_json(paths.lead_status, {}) or {}
     since = (config.today() - timedelta(days=days)).isoformat()
     leads = {l["id"]: l for l in load(paths)}
-    skips, likes, applied = Counter(), Counter(), 0
-    liked_examples = []
+    skips, likes = Counter(), Counter()
+    applied, liked, skipped, interested = [], [], [], []
     for lid, s in status.items():
-        if str(s.get("at", ""))[:10] < since:
+        l = leads.get(lid)
+        if not l or str(s.get("at", ""))[:10] < since:
             continue
         if s.get("status") == "Skipped":
             skips.update(s.get("reasons") or ["no reason"])
-        if s.get("status") == "Applied":
-            applied += 1
+            skipped.append(f"{_row(l)} | skipped: {', '.join(s.get('reasons') or []) or 'no reason'}")
+        elif s.get("status") == "Applied":
+            applied.append(_row(l))
+        elif s.get("status") == "Interested":
+            interested.append(_row(l))
         if s.get("liked"):
             likes.update(s.get("like_reasons") or ["liked"])
-            if lid in leads:
-                liked_examples.append(f"{leads[lid].get('company')} - {leads[lid].get('title')}")
-    return {"days": days, "applied": applied, "skip_reasons": dict(skips.most_common()),
-            "like_reasons": dict(likes.most_common()), "liked_examples": liked_examples[:10]}
+            liked.append(f"{_row(l)} | liked: {', '.join(s.get('like_reasons') or []) or '-'}")
+    shown = [l for l in leads.values() if str(l.get("found", "")) >= since]
+    untouched = [l for l in shown if l["id"] not in status]
+    return {"days": days, "leads_shown": len(shown), "applied": len(applied), "skipped": len(skipped),
+            "liked": len(liked), "untouched": len(untouched),
+            "skip_reasons": dict(skips.most_common()), "like_reasons": dict(likes.most_common()),
+            "applied_leads": applied[-40:], "liked_leads": liked[-40:], "skipped_leads": skipped[-60:],
+            "interested_leads": interested[-20:],
+            "untouched_high_fit": [_row(l) for l in untouched if (l.get("fit") or 0) >= 8][-20:]}
 
 
 def main(argv=None):
