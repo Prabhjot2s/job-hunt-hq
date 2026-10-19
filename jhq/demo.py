@@ -36,11 +36,11 @@ APPS = [  # company, title, family, arrangement, salary (min, max), days ago, ou
 ]
 LEADS = [
     (9, "Northwind Traders", "Senior Data Analyst", "Chicago, IL", "Hybrid", "$95,000 - $115,000", "3", True, "SQL, Tableau and A/B testing match your Northwind work; KPI ownership", "Looker preferred"),
-    (8, "Contoso Cloud", "Business Intelligence Analyst", "Remote, United States", "Remote", "$100,000 - $120,000", "2-4", True, "Dashboards for sales leaders, SQL + Snowflake, same tools as you", "Salesforce data is new to you"),
+    (8, "Contoso Cloud", "Business Intelligence Analyst", "United States", "Remote", "$100,000 - $120,000", "2-4", True, "Dashboards for sales leaders, SQL + Snowflake, same tools as you", "Salesforce data is new to you"),
     (8, "Fabrikam", "Analytics Analyst, Marketing", "Chicago, IL", "Hybrid", "$88,000 - $102,000", "3+", True, "Email A/B tests and promo analysis, exactly your Northwind projects", None),
-    (7, "Litware", "Data Analyst", "Remote, United States", "Remote", "Not listed", "2+", False, "Retail data, SQL and Power BI", "Pay not listed"),
+    (7, "Litware", "Data Analyst", "United States", "Remote", "Not listed", "2+", False, "Retail data, SQL and Power BI", "Pay not listed"),
     (7, "Adventure Works", "Reporting Analyst", "Evanston, IL", "Hybrid", "$80,000 - $95,000", "2", True, "Replacing manual Excel reports with SQL", "More Excel-heavy than you'd like"),
-    (6, "Proseware", "Product Data Analyst", "Remote, United States", "Remote", "$110,000 - $130,000", "4-5", True, "Experimentation and SQL", "Asks 4-5 years; product domain is new"),
+    (6, "Proseware", "Product Data Analyst", "United States", "Remote", "$110,000 - $130,000", "4-5", True, "Experimentation and SQL", "Asks 4-5 years; product domain is new"),
     (5, "Tailspin Toys", "Analytics Engineer", "Chicago, IL", "Hybrid", "$120,000 - $140,000", "4+", False, "dbt and SQL", "Production dbt and Airflow ownership"),
 ]
 EVENT_ORDER = {"screen": ["screen"], "interview": ["screen", "interview"], "final": ["screen", "interview", "final"],
@@ -80,7 +80,7 @@ def build(root: Path):
         a_lo = round(rnd.uniform(0.72, 0.86), 2)
         c_lo = round(rnd.uniform(0.08, 0.2), 2)
         rows.append({"Company": co, "Job Title": title, "Date Applied": (today - dt.timedelta(days=ago)).isoformat(),
-                     "Location": "Chicago, IL" if arr != "Remote" else "Remote, United States", "Work Arrangement": arr,
+                     "Location": "Chicago, IL" if arr != "Remote" else "United States", "Work Arrangement": arr,
                      "Salary Range": f"${lo:,} - ${hi:,}", "Salary Min": lo, "Salary Max": hi, "Currency": "USD",
                      "Job Family": fam, "ATS Match When Applied": f"{int(a_lo * 100)}-{int(a_lo * 100) + 7}%",
                      "Callback Estimate": f"{int(c_lo * 100)}-{int(c_lo * 100) + 6}%", "ATS Low": a_lo,
