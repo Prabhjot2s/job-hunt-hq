@@ -34,6 +34,30 @@ day, and tracks every application on a private dashboard on your own computer.
 Optional: with Claude's Gmail connector it notices rejections and interview invites and updates your
 tracker; with the Indeed or Dice connectors the radar also searches those boards.
 
+## A day with Job Hunt HQ
+
+1. **It finds the jobs for you.** At the time you choose during setup (say 5 PM on weekdays), the radar
+   runs on its own. It checks the job boards of every company you watch, keeps roles posted in the last
+   day or two that match your titles, places, work mode, pay floor and years of experience, and scores
+   each one against your real background.
+2. **Your shortlist is waiting on the dashboard.** Open it and the Jobs tab shows today's best roles
+   first, each with why it fits, any gaps, the pay and the years asked. Your daily goal (for example
+   5 applications) is shown as dots you fill in.
+3. **One click to tailor.** Press **Copy "tailor this"** on a job and paste it into Claude Code. The
+   copied text already holds the company, role, link and what to do, so Claude reads the full posting,
+   shows your current match, asks only about real gaps, and builds your tailored resume, cover letter
+   and a saved copy of the posting in a few minutes.
+4. **You apply, it keeps the records.** Submit the application yourself, then click **Applied** on the
+   dashboard. About a minute later the tracker has a new row, including the match scores of the exact
+   resume you sent.
+5. **Replies move it along.** Tell Claude "Acme rejected me" or "Globex wants an interview Thursday"
+   (or let it read your Gmail, if you connected it), and the tracker and pipeline update. Ask "prep me
+   for Globex" and you get an interview prep pack.
+
+Your skips and likes on the dashboard (with one-click reasons like "too senior" or "low pay") feed into
+how Claude scores new jobs, and an optional weekly review suggests changes: new companies to watch,
+titles to drop, a different pay floor.
+
 ## How it works
 
 You talk to Claude Code as usual. Three Claude skills handle the conversation (setup, applications,
@@ -102,9 +126,15 @@ clipboard: paste it into Claude Code.
 
 ## Scheduling the radar
 
-During setup you choose: a Claude scheduled task (best judgement, uses your Claude plan), a free
-rules-only run by your computer's scheduler (no Claude usage; leads get a simple score Claude can
-review later), or running it by hand.
+During setup you pick the days and time, and how it runs:
+
+| Option | How it works | Cost |
+|---|---|---|
+| **Claude runs it** | A Claude scheduled task (for example in the Claude desktop app) runs the radar, reads each posting and scores it with judgement. Best results. | Uses your Claude plan |
+| **Your computer runs it** | Windows Task Scheduler or cron runs the radar on its own. Leads get a simple rules-based score; ask Claude "review my leads" later for a proper one. | Free |
+| **By hand** | Say "run my job radar" whenever you like. | Your choice |
+
+Missed a day because the computer was off? The next run catches up on the days it missed.
 
 ## Project layout
 
@@ -118,9 +148,20 @@ tests/           automated tests
 
 ## Credits
 
-The measured ATS check, cover-letter rules, interview prep and skill-gap ideas are adapted from
-[MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search) (MIT). See
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Job Hunt HQ grew out of my own job search. A few of its ideas come from Mads Lorentzen's
+[ai-job-search](https://github.com/MadsLorentzen/ai-job-search), an excellent Claude Code
+job-application framework (MIT licence). Thank you, Mads.
+
+| Part of Job Hunt HQ | Adapted from ai-job-search | Added here |
+|---|---|---|
+| ATS check (`jhq/ats_check.py`) | Reading the PDF's text layer the way an ATS does, folding typographic characters, and flagging date ranges that use a long dash (its `tools/verify_pdf.py`) | Keyword coverage scoring by section, two-parser comparison, contact and heading checks |
+| Cover-letter rules | Writing-style and cover-letter guidance (no clichés, show don't tell, verify company facts) | Automatic letter QA in the package builder |
+| Interview prep | The structure of the prep pack (its `/interview` command and interview-prep guide) | Links to your tracker, job folder and story bank |
+| Skill gaps | Scoring gaps by how often postings ask for a skill (its `upskill` skill) | The heatmap, the dashboard tab, job-family breakdown |
+
+Everything else was built for this project: the setup interview, the facts file and resume rules, the
+Word/PDF package builder and its checks, the tracker, the job radar and company discovery, the
+dashboard and the demo. The required licence notice is in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Feedback
 
