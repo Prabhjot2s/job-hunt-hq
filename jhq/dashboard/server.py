@@ -244,18 +244,20 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         u = urlparse(self.path)
+        try:
+            n = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            n = -1
+        if n < 0 or n > 4096:
+            self.close_connection = True  # don't read an oversized body; just hang up after replying
+            return self._send(413, '{"error":"too large"}')
+        raw = self.rfile.read(n) if n else b""  # always drain, so the reply isn't cut off
         if (not self._host_ok() or not self._origin_ok()
                 or u.path not in ("/api/open", "/api/lead-status") or self.headers.get("X-HQ") != "1"
                 or not (self.headers.get("Content-Type") or "").startswith("application/json")):
             return self._send(403, '{"error":"forbidden"}')
         try:
-            n = int(self.headers.get("Content-Length") or 0)
-        except ValueError:
-            return self._send(400, '{"error":"bad length"}')
-        if n < 0 or n > 4096:
-            return self._send(413, '{"error":"too large"}')
-        try:
-            body = json.loads(self.rfile.read(n) or b"{}")
+            body = json.loads(raw or b"{}")
         except ValueError:
             return self._send(400, '{"error":"bad json"}')
         if not isinstance(body, dict):
