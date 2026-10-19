@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "job-hunt-hq"
+version = "0.1.0"
+description = "An AI job-search system for Claude Code: truthful resume tailoring, measured ATS checks, cover letters, a daily job radar and a local application dashboard."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = [
+    "python-docx>=1.1",
+    "openpyxl>=3.1",
+    "pymupdf>=1.24",
+    "pypdf>=4.0",
+    "requests>=2.31",
+    "tzdata>=2024.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+jhq = "jhq.cli:main"
+
+[tool.setuptools]
+packages = ["jhq", "jhq.radar", "jhq.dashboard"]
+
+[tool.setuptools.package-data]
+"jhq.dashboard" = ["index.html"]

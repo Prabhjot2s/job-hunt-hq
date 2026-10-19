@@ -1,0 +1,20 @@
+{
+  "_help": "Your header and defaults. The setup fills this in; edit any time. Never commit this file anywhere public.",
+  "name": "Your Name",
+  "location": "City, Region",
+  "phone": "",
+  "email": "",
+  "links": [
+    {"label": "LinkedIn", "url": "https://www.linkedin.com/in/your-handle/"}
+  ],
+  "years_experience": "",
+  "current_title": "",
+  "target_titles": [],
+  "base_resume": "profile/base_resume.pdf",
+  "style": {
+    "font": "Calibri",
+    "page_fill_min": 92,
+    "max_bold": 10
+  },
+  "forbidden_phrases": []
+}

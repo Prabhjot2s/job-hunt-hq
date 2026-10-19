@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+
+# Your job-search data never lives in this repo. If you point your data folder here by
+# mistake, these keep it out of git anyway.
+/my-data/
+/applications/
+/tracker/
+/profile/
+/radar/
+/skill-gap/
+*.xlsx
+*.pdf
+!examples/**/*.pdf
+!docs/**/*.pdf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+~$*
+*.tmp
+.vscode/
+.idea/

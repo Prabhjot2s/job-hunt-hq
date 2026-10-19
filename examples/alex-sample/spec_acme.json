@@ -1,0 +1,61 @@
+{
+  "company": "Acme Analytics",
+  "title": "Data Analyst",
+  "link": "https://example.com/jobs/acme-data-analyst",
+  "resume": {
+    "headline": "Data Analyst | SQL | Tableau",
+    "summary": "Data analyst with **3+ years** of experience turning retail and logistics data into dashboards, KPIs and decisions. Strong in **SQL**, Tableau, Power BI, Excel and Python (pandas), with hands-on A/B testing and a habit of automating data-quality checks so stakeholders can trust the numbers.",
+    "experience": [
+      {"title": "Data Analyst | Northwind Retail - Chicago, IL | Mar 2023 - Present",
+       "groups": [{"subhead": null, "bullets": [
+         "Built **12 Tableau and Power BI dashboards** for store operations and merchandising, used by about 80 people every week.",
+         "Cut weekly reporting from **6 hours to 1** by replacing manual Excel reports with SQL (CTEs, window functions) on Snowflake.",
+         "Defined KPIs (sell-through, stock-outs, basket size) with category managers so every team reads the same numbers.",
+         "Designed and analyzed **A/B tests** on email promotions with marketing, reporting lift and confidence intervals.",
+         "Automated a daily data-quality check in Python (pandas) that flags missing store feeds before reports go out."]}]},
+      {"title": "Junior Analyst | Contoso Logistics - Milwaukee, WI | Jun 2021 - Feb 2023",
+       "groups": [{"subhead": null, "bullets": [
+         "Maintained shipment-volume reports in Excel (Power Query, pivot tables) for 3 regional managers.",
+         "Found **$40K in duplicate carrier charges** in one year by cleaning and reconciling invoice data."]}]}
+    ],
+    "skills": [["Analytics", "SQL (CTEs, window functions), Excel (Power Query, pivot tables), A/B testing, KPI definition"],
+               ["BI & visualization", "Tableau, Power BI, dashboards for non-technical stakeholders"],
+               ["Data & tools", "Python (pandas), Snowflake, dbt (project), data quality checks"]],
+    "education": [{"degree": "B.S. Statistics", "detail": "Lakeview State University, Madison, WI | Sep 2017 - May 2021"}],
+    "certifications": ["Tableau Desktop Specialist (2022)"],
+    "projects": {"heading": "Projects", "bullets": ["[Store Demand Forecast](https://example.com/alex/forecast) - weekly demand forecast for 40 stores with Prophet (11% MAPE)."]}
+  },
+  "jd": {
+    "summary": [["Company", "Acme Analytics"], ["Job title", "Data Analyst"], ["Location", "Chicago, IL"],
+                ["Work arrangement", "Hybrid, 2 days in office"], ["Salary", "$85,000 - $105,000 USD"],
+                ["Most relevant skills", "SQL, Tableau, KPIs, A/B testing, stakeholders"],
+                ["Nice-to-have skills", "Python, dbt, Looker"], ["Experience asked", "2-4 years"]],
+    "text_file": "jd_acme.txt"
+  },
+  "ats": {
+    "required": ["SQL", "Tableau", "Excel", "KPIs", "A/B testing", {"term": "stakeholders", "aka": ["category managers"]}],
+    "preferred": ["Python", "dbt", "Looker", "data quality"]
+  },
+  "cover_letter": {
+    "recipient": ["Hiring Team", "Acme Analytics", "Chicago, IL"],
+    "salutation": "Dear Hiring Team,",
+    "paragraphs": [
+      "I'm applying for the Data Analyst role on the Commercial Insights team at Acme Analytics. The work you describe, turning sales and customer data into dashboards that commercial leaders act on, is the work I do every day at Northwind Retail, and the part I enjoy most.",
+      "At Northwind I built 12 Tableau and Power BI dashboards for store operations and merchandising, and about 80 people use them every week. Before that, most of those numbers lived in manual Excel reports. Rewriting them as SQL on Snowflake cut our weekly reporting from 6 hours to 1, and it gave category managers one set of KPIs (sell-through, stock-outs, basket size) that we defined together.",
+      "I also like testing ideas properly. With our marketing team I designed and analyzed A/B tests on email promotions and reported lift with confidence intervals, so decisions came from evidence rather than the loudest opinion. To keep reports trustworthy, I wrote a daily Python check that flags missing store feeds before anything goes out.",
+      "Your posting mentions pricing and promotion tests and stronger data quality checks in your pipelines. Those are the two areas where I think I can help Acme Analytics fastest. I haven't used Looker in production yet; I have built the same kind of semantic layer in Tableau and would ramp up on it quickly.",
+      "Thank you for your time and consideration. I would be glad to walk you through one of my dashboards."
+    ],
+    "closing": "Sincerely,"
+  },
+  "tracker": {
+    "fields": {
+      "ATS Match When Applied": "80-87%", "Callback Estimate": "14-20%",
+      "ATS Low": 0.80, "ATS High": 0.87, "Callback Low": 0.14, "Callback High": 0.20,
+      "Tailoring Level": "Medium", "Emphasis": "SQL; Tableau; A/B testing; KPIs",
+      "Direct Domain Experience": "Adjacent", "Job Family": "Business Intelligence", "Industry": "Analytics / SaaS",
+      "Main Strengths": "SQL + Tableau daily; KPI definition; A/B tests", "Main Gaps": "Looker not in production",
+      "Resume Strategy": "Lead with dashboards and SQL automation; A/B tests second; honest Looker gap in the letter."
+    }
+  }
+}

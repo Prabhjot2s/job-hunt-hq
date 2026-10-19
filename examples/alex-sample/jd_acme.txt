@@ -1,0 +1,22 @@
+Acme Analytics is hiring a Data Analyst to join our Commercial Insights team.
+
+About the role
+You will turn sales and customer data into dashboards and recommendations for our commercial leaders.
+
+What you'll do
+- Build and maintain Tableau dashboards for sales and marketing.
+- Write SQL to answer questions from stakeholders across the business.
+- Define KPIs and help teams use them consistently.
+- Design and analyze A/B tests for pricing and promotions.
+- Improve data quality checks in our pipelines.
+
+What you bring
+- 2-4 years of experience in a data analyst role.
+- Strong SQL and Excel.
+- Experience with Tableau or Power BI.
+- Python (pandas) is an asset.
+- Experience with dbt or Looker is nice to have.
+- Clear communication with non-technical stakeholders.
+
+Location: Chicago, IL (hybrid, 2 days a week in office)
+Salary range: $85,000 - $105,000 USD per year

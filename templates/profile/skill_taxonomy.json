@@ -1,0 +1,640 @@
+{
+ "_about": "Skills the gap analysis looks for in your saved job descriptions, and YOUR TRUE LEVEL for each. Levels: strong = used in real work and on your resume; working = used for real but lighter; project = only in personal/school projects; foundational = skills-list only, no hands-on claim; none = not confirmed. Setup fills these in from your answers. Change a level only when you confirm new experience. Add skills from your own field freely. Patterns are case-insensitive regexes matched on word boundaries.",
+ "levels": {
+  "strong": 1.0,
+  "working": 0.7,
+  "project": 0.5,
+  "foundational": 0.3,
+  "none": 0.0
+ },
+ "skills": [
+  {
+   "skill": "SQL",
+   "cat": "Data & querying",
+   "level": "none",
+   "re": [
+    "sql",
+    "t-sql",
+    "postgres(?:ql)?",
+    "mysql"
+   ]
+  },
+  {
+   "skill": "Python",
+   "cat": "Data & querying",
+   "level": "none",
+   "re": [
+    "python",
+    "pandas"
+   ]
+  },
+  {
+   "skill": "R",
+   "cat": "Data & querying",
+   "level": "none",
+   "re": [
+    "r programming",
+    "r studio",
+    "rstudio",
+    "tidyverse",
+    "python or r",
+    "r or python",
+    "python/r",
+    "r/python",
+    "sql, r",
+    "python, r"
+   ]
+  },
+  {
+   "skill": "Excel (advanced)",
+   "cat": "Data & querying",
+   "level": "none",
+   "re": [
+    "excel",
+    "power query",
+    "pivot tables?",
+    "vlookup",
+    "xlookup"
+   ]
+  },
+  {
+   "skill": "VBA / macros",
+   "cat": "Data & querying",
+   "level": "none",
+   "re": [
+    "vba",
+    "macros?"
+   ]
+  },
+  {
+   "skill": "Power BI / DAX",
+   "cat": "BI & visualization",
+   "level": "none",
+   "re": [
+    "power ?bi",
+    "dax"
+   ]
+  },
+  {
+   "skill": "Tableau",
+   "cat": "BI & visualization",
+   "level": "none",
+   "re": [
+    "tableau"
+   ]
+  },
+  {
+   "skill": "Looker / LookML",
+   "cat": "BI & visualization",
+   "level": "none",
+   "re": [
+    "looker",
+    "lookml"
+   ]
+  },
+  {
+   "skill": "Other BI (Qlik, Sigma, Mode, MicroStrategy)",
+   "cat": "BI & visualization",
+   "level": "none",
+   "re": [
+    "qlik",
+    "sigma computing",
+    "mode analytics",
+    "microstrategy",
+    "domo",
+    "metabase",
+    "superset"
+   ]
+  },
+  {
+   "skill": "Data visualization / dashboards",
+   "cat": "BI & visualization",
+   "level": "none",
+   "re": [
+    "dashboards?",
+    "data visuali[sz]ation",
+    "visuali[sz]ations?"
+   ]
+  },
+  {
+   "skill": "SSRS / SSIS / SSAS",
+   "cat": "BI & visualization",
+   "level": "none",
+   "re": [
+    "ssrs",
+    "ssis",
+    "ssas",
+    "sql server reporting"
+   ]
+  },
+  {
+   "skill": "Snowflake",
+   "cat": "Cloud data stack",
+   "level": "none",
+   "re": [
+    "snowflake"
+   ]
+  },
+  {
+   "skill": "Databricks / Spark",
+   "cat": "Cloud data stack",
+   "level": "none",
+   "re": [
+    "databricks",
+    "pyspark",
+    "spark"
+   ]
+  },
+  {
+   "skill": "dbt",
+   "cat": "Cloud data stack",
+   "level": "none",
+   "re": [
+    "dbt"
+   ]
+  },
+  {
+   "skill": "BigQuery / GCP",
+   "cat": "Cloud data stack",
+   "level": "none",
+   "re": [
+    "bigquery",
+    "gcp",
+    "google cloud"
+   ]
+  },
+  {
+   "skill": "AWS",
+   "cat": "Cloud data stack",
+   "level": "none",
+   "re": [
+    "aws",
+    "amazon web services",
+    "redshift",
+    "s3",
+    "athena"
+   ]
+  },
+  {
+   "skill": "Azure / Fabric / ADF",
+   "cat": "Cloud data stack",
+   "level": "none",
+   "re": [
+    "azure",
+    "microsoft fabric",
+    "data factory",
+    "synapse"
+   ]
+  },
+  {
+   "skill": "Airflow / orchestration",
+   "cat": "Cloud data stack",
+   "level": "none",
+   "re": [
+    "airflow",
+    "dagster",
+    "prefect",
+    "orchestration"
+   ]
+  },
+  {
+   "skill": "ETL / data pipelines",
+   "cat": "Data engineering",
+   "level": "none",
+   "re": [
+    "etl",
+    "elt",
+    "data pipelines?",
+    "etl pipelines?"
+   ]
+  },
+  {
+   "skill": "Data modeling (star schema)",
+   "cat": "Data engineering",
+   "level": "none",
+   "re": [
+    "data model(?:l)?ing",
+    "star schema",
+    "dimensional model",
+    "semantic (?:layer|model)"
+   ]
+  },
+  {
+   "skill": "Data migration / conversion",
+   "cat": "Data engineering",
+   "level": "none",
+   "re": [
+    "data migrations?",
+    "migrations?",
+    "data conversion",
+    "cutover"
+   ]
+  },
+  {
+   "skill": "Data quality / validation",
+   "cat": "Data engineering",
+   "level": "none",
+   "re": [
+    "data quality",
+    "data validation",
+    "validation",
+    "reconciliation",
+    "data integrity",
+    "data cleansing",
+    "data cleaning"
+   ]
+  },
+  {
+   "skill": "Data governance / privacy",
+   "cat": "Data engineering",
+   "level": "none",
+   "re": [
+    "data governance",
+    "privacy",
+    "gdpr",
+    "hipaa",
+    "ccpa",
+    "pipeda",
+    "data stewardship"
+   ]
+  },
+  {
+   "skill": "Statistics",
+   "cat": "Statistics & modeling",
+   "level": "none",
+   "re": [
+    "statistic(?:s|al)",
+    "hypothesis testing",
+    "significance",
+    "regression"
+   ]
+  },
+  {
+   "skill": "A/B testing / experimentation",
+   "cat": "Statistics & modeling",
+   "level": "none",
+   "re": [
+    "a/b test(?:ing)?",
+    "ab test(?:ing)?",
+    "experimentation",
+    "experiments?"
+   ]
+  },
+  {
+   "skill": "Forecasting",
+   "cat": "Statistics & modeling",
+   "level": "none",
+   "re": [
+    "forecast(?:ing|s)?",
+    "time series"
+   ]
+  },
+  {
+   "skill": "Machine learning",
+   "cat": "Statistics & modeling",
+   "level": "none",
+   "re": [
+    "machine learning",
+    "\\bml\\b",
+    "predictive model(?:l)?ing",
+    "scikit-learn",
+    "sklearn"
+   ]
+  },
+  {
+   "skill": "Financial modeling",
+   "cat": "Statistics & modeling",
+   "level": "none",
+   "re": [
+    "financial model(?:l)?ing",
+    "fp&a",
+    "budgeting",
+    "variance analysis"
+   ]
+  },
+  {
+   "skill": "LLMs / generative AI",
+   "cat": "AI & automation",
+   "level": "none",
+   "re": [
+    "llms?",
+    "generative ai",
+    "genai",
+    "gen ai",
+    "large language models?",
+    "gpt",
+    "openai",
+    "anthropic",
+    "claude",
+    "prompt engineering",
+    "\\brag\\b"
+   ]
+  },
+  {
+   "skill": "AI agents / agentic workflows",
+   "cat": "AI & automation",
+   "level": "none",
+   "re": [
+    "ai agents?",
+    "agentic",
+    "multi-agent"
+   ]
+  },
+  {
+   "skill": "Workflow automation (Zapier, n8n, Power Automate)",
+   "cat": "AI & automation",
+   "level": "none",
+   "re": [
+    "zapier",
+    "n8n",
+    "power automate",
+    "make\\.com",
+    "workato",
+    "automation"
+   ]
+  },
+  {
+   "skill": "Power Apps / Power Platform",
+   "cat": "AI & automation",
+   "level": "none",
+   "re": [
+    "power apps",
+    "powerapps",
+    "power platform",
+    "dataverse"
+   ]
+  },
+  {
+   "skill": "APIs / integrations",
+   "cat": "AI & automation",
+   "level": "none",
+   "re": [
+    "apis?",
+    "rest apis?",
+    "webhooks?",
+    "json",
+    "api integrations?",
+    "system integrations?"
+   ]
+  },
+  {
+   "skill": "JavaScript / web dev",
+   "cat": "AI & automation",
+   "level": "none",
+   "re": [
+    "javascript",
+    "typescript",
+    "react",
+    "node\\.?js"
+   ]
+  },
+  {
+   "skill": "Git / version control",
+   "cat": "AI & automation",
+   "level": "none",
+   "re": [
+    "git",
+    "github",
+    "version control"
+   ]
+  },
+  {
+   "skill": "Salesforce",
+   "cat": "CRM & GTM tools",
+   "level": "none",
+   "re": [
+    "salesforce",
+    "sfdc"
+   ]
+  },
+  {
+   "skill": "HubSpot",
+   "cat": "CRM & GTM tools",
+   "level": "none",
+   "re": [
+    "hubspot"
+   ]
+  },
+  {
+   "skill": "Clay / GTM data tools",
+   "cat": "CRM & GTM tools",
+   "level": "none",
+   "re": [
+    "clay",
+    "apollo",
+    "zoominfo",
+    "outreach\\.io",
+    "gong"
+   ]
+  },
+  {
+   "skill": "Product analytics (Amplitude, Mixpanel, GA)",
+   "cat": "CRM & GTM tools",
+   "level": "none",
+   "re": [
+    "amplitude",
+    "mixpanel",
+    "google analytics",
+    "ga4",
+    "heap analytics",
+    "product analytics"
+   ]
+  },
+  {
+   "skill": "ERP (SAP, Oracle, NetSuite, Workday)",
+   "cat": "CRM & GTM tools",
+   "level": "none",
+   "re": [
+    "sap",
+    "oracle",
+    "netsuite",
+    "workday",
+    "erp",
+    "dynamics 365"
+   ]
+  },
+  {
+   "skill": "Jira / Agile",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "jira",
+    "agile",
+    "scrum",
+    "confluence"
+   ]
+  },
+  {
+   "skill": "Requirements gathering",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "requirements? gathering",
+    "business requirements",
+    "gather(?:ing)? requirements",
+    "requirements documentation",
+    "brds?"
+   ]
+  },
+  {
+   "skill": "Stakeholder management",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "stakeholders?",
+    "cross-functional",
+    "business partners?"
+   ]
+  },
+  {
+   "skill": "KPIs / metrics definition",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "kpis?",
+    "metrics?",
+    "key performance"
+   ]
+  },
+  {
+   "skill": "Presenting / storytelling",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "storytelling",
+    "present(?:ing|ations?)",
+    "powerpoint",
+    "communicat(?:e|ion) (?:findings|insights)"
+   ]
+  },
+  {
+   "skill": "Process improvement / mapping",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "process improvement",
+    "process mapping",
+    "lean",
+    "six sigma",
+    "continuous improvement",
+    "bpmn",
+    "visio"
+   ]
+  },
+  {
+   "skill": "UAT / testing",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "uat",
+    "user acceptance",
+    "testing"
+   ]
+  },
+  {
+   "skill": "Project management",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "project management",
+    "pmp",
+    "project manage"
+   ]
+  },
+  {
+   "skill": "People management",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "people management",
+    "manage a team",
+    "direct reports",
+    "mentor(?:ing)?"
+   ]
+  },
+  {
+   "skill": "Java / C# / Go",
+   "cat": "Software engineering",
+   "level": "none",
+   "re": [
+    "java",
+    "c#",
+    "\\.net",
+    "golang",
+    "\\bgo\\b"
+   ]
+  },
+  {
+   "skill": "Cloud infrastructure (Docker, Kubernetes, Terraform)",
+   "cat": "Software engineering",
+   "level": "none",
+   "re": [
+    "docker",
+    "kubernetes",
+    "k8s",
+    "terraform",
+    "ci/cd"
+   ]
+  },
+  {
+   "skill": "SEO / SEM / paid ads",
+   "cat": "Marketing & growth",
+   "level": "none",
+   "re": [
+    "seo",
+    "sem",
+    "google ads",
+    "paid search",
+    "paid social",
+    "ppc"
+   ]
+  },
+  {
+   "skill": "Marketing automation / email",
+   "cat": "Marketing & growth",
+   "level": "none",
+   "re": [
+    "marketo",
+    "mailchimp",
+    "braze",
+    "email marketing",
+    "marketing automation"
+   ]
+  },
+  {
+   "skill": "Product management / roadmaps",
+   "cat": "Product & design",
+   "level": "none",
+   "re": [
+    "product management",
+    "roadmaps?",
+    "product requirements",
+    "prds?"
+   ]
+  },
+  {
+   "skill": "Figma / UX design",
+   "cat": "Product & design",
+   "level": "none",
+   "re": [
+    "figma",
+    "ux design",
+    "user research",
+    "wireframes?",
+    "prototyp(?:e|ing)"
+   ]
+  },
+  {
+   "skill": "Second language",
+   "cat": "Ways of working",
+   "level": "none",
+   "re": [
+    "bilingual",
+    "french",
+    "spanish",
+    "german",
+    "mandarin"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+  "_help": "What the job radar looks for. The setup fills this in from your answers. Title lists are plain words or phrases (case-insensitive); use a regex like \\bBI\\b for short words.",
+  "titles_include": ["analyst"],
+  "titles_exclude": ["intern", "internship", "co-op", "director", "vice president", "\\bvp\\b", "head of", "chief"],
+  "areas": [
+    {"label": "Home area", "match": ["your city"], "modes": ["remote", "hybrid"]}
+  ],
+  "country": "",
+  "remote_in_country": true,
+  "remote_global": "flag",
+  "salary": {"currency": "", "floor": null, "use_midpoint": true},
+  "years_max": null,
+  "window_days": 2,
+  "daily_goal": {"weekday": 5, "weekend": 10},
+  "search_queries": [],
+  "notes": []
+}

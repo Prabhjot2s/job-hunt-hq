@@ -1,0 +1,17 @@
+{
+  "_help": "Fictional demo person. Used by the tests and the screenshots.",
+  "name": "Alex Sample",
+  "location": "Chicago, IL",
+  "phone": "(555) 010-0199",
+  "email": "alex.sample@example.com",
+  "links": [
+    {"label": "LinkedIn", "url": "https://www.linkedin.com/in/alex-sample-demo/"},
+    {"label": "Portfolio", "url": "https://example.com/alex"}
+  ],
+  "years_experience": "3",
+  "current_title": "Data Analyst",
+  "target_titles": ["Data Analyst", "Business Intelligence Analyst", "Analytics Analyst"],
+  "base_resume": "profile/base_resume.pdf",
+  "style": {"font": "Calibri", "page_fill_min": 90, "max_bold": 10},
+  "forbidden_phrases": ["Expired Example Certification"]
+}
