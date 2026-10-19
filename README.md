@@ -51,14 +51,15 @@ You: "Acme invited me to an interview Thursday"  ->  tracker updated, prep pack 
 ## Install
 
 You need [Claude Code](https://claude.com/claude-code) (desktop app or terminal), Python 3.9+, and
-Microsoft Word **or** the free [LibreOffice](https://www.libreoffice.org/) for PDFs. Works on Windows,
-macOS and Linux.
+Microsoft Word **or** the free [LibreOffice](https://www.libreoffice.org/) for PDFs. Built for Windows,
+macOS and Linux; tested so far on Windows. If something breaks on a Mac or Linux, please open an issue.
 
 **Easiest:** open Claude Code and say:
 
-> Install Job Hunt HQ from https://github.com/Prabhjot2s/job-hunt-hq
+> Install Job Hunt HQ from https://github.com/Prabhjot2s/job-hunt-hq and follow its INSTALL.md
 
-Claude clones it, runs the installer and starts the setup interview.
+Claude clones it, runs the installer, and then you start a new chat and say **"set up Job Hunt HQ"**
+(new skills load in a new conversation).
 
 **By hand:**
 ```bash
@@ -66,7 +67,7 @@ git clone https://github.com/Prabhjot2s/job-hunt-hq.git
 cd job-hunt-hq
 python install.py
 ```
-Then in Claude Code: **"set up Job Hunt HQ"**.
+(Use `python3` on macOS and Linux.) Then start a new Claude Code chat and say **"set up Job Hunt HQ"**.
 
 The setup asks for your resume and a few preferences (about 15-25 minutes): what Claude may change on
 your resume, the roles and places you want, your pay floor, the companies to watch (or Claude finds
