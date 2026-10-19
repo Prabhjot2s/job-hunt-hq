@@ -13,6 +13,7 @@
     jhq companies ...                                 the radar's company list
     jhq jd <url>                                      read a full job posting
     jhq dashboard [--open] [--autostart on|off]       the local dashboard
+    jhq demo                                          try the dashboard with fictional data
 """
 from __future__ import annotations
 
@@ -100,7 +101,8 @@ def cmd_doctor(_argv):
     pdf = available()
     line(bool(pdf), "PDF export", ", ".join(pdf) or "install LibreOffice (free) or Microsoft Word")
     cfg = config.load_config()
-    line(bool(cfg.get("data_dir")), "data folder", cfg.get("data_dir") or "not set: run the setup")
+    line(True if cfg.get("data_dir") else None, "data folder",
+         cfg.get("data_dir") or "not set up yet: in Claude Code say \"set up Job Hunt HQ\"")
     if cfg.get("data_dir"):
         try:
             p = config.Paths()
@@ -207,7 +209,7 @@ def main(argv=None):
             from .radar import sync
             return sync.main(rest[1:])
         raise SystemExit("Use: jhq radar run | jhq radar sync")
-    modules = {"build": "build_package", "ats": "ats_check", "md2docx": "md_to_docx", "tracker": "tracker",
+    modules = {"demo": "demo", "build": "build_package", "ats": "ats_check", "md2docx": "md_to_docx", "tracker": "tracker",
                "skillgap": "skill_gap", "leads": "radar.leads", "companies": "radar.companies", "jd": "radar.jd"}
     if cmd not in modules:
         raise SystemExit(f"Unknown command '{cmd}'. Run `jhq help`.")

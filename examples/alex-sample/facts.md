@@ -7,10 +7,12 @@
 - Defined KPIs (sell-through, stock-outs, basket size) with category managers.
 - Ran A/B tests on email promotions with the marketing team; reported lift and confidence intervals.
 - Automated a daily data-quality check in Python (pandas) that flags missing store feeds.
+- Trained 15 store managers to use the dashboards themselves; fewer ad-hoc data requests (not measured).
 
 ### Junior Analyst | Contoso Logistics - Milwaukee, WI | Jun 2021 - Feb 2023
 - Maintained shipment-volume reports in Excel (Power Query, pivot tables) for 3 regional managers.
 - Cleaned and reconciled carrier invoice data; found $40K in duplicate charges over one year.
+- Built a weekly on-time delivery KPI report used in regional performance reviews.
 
 ## Education
 - B.S. Statistics - Lakeview State University, Madison, WI | Sep 2017 - May 2021

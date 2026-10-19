@@ -41,7 +41,7 @@ def command() -> str:
 
 
 def step(msg):
-    print(f"\n==> {msg}")
+    print(f"\n==> {msg}", flush=True)
 
 
 def make_venv():
@@ -110,6 +110,7 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--remove", action="store_true")
     a = ap.parse_args()
+    getattr(sys.stdout, "reconfigure", lambda **k: None)(line_buffering=True)  # keep output in order
     if sys.version_info < (3, 9):
         sys.exit(f"Python 3.9 or newer is needed (this is {sys.version.split()[0]}).")
     if a.check:

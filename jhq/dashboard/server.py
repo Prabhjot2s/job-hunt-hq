@@ -67,9 +67,10 @@ def load_tracker():
                 rows = trk.rows(P)
                 for r in rows:
                     rf = r.get("Resume File")
-                    r["_folder"] = str(Path(rf).parent) if rf else None
+                    guess = P.applications / config.safe_name(f"{r.get('Company')} - {r.get('Job Title')}")
+                    r["_folder"] = str(Path(rf).parent) if rf else (str(guess) if guess.is_dir() else None)
                 _cache.update(payload={"headers": trk.HEADERS, "rows": rows}, mtime=mtime, error=None)
-            except BaseException as e:  # noqa: BLE001  (TrackerError is a SystemExit)
+            except (Exception, SystemExit) as e:  # noqa: BLE001  (TrackerError is a SystemExit)
                 _cache["error"] = f"{type(e).__name__}: {e}"
         return _cache["payload"], _cache["mtime"], _cache["error"]
 

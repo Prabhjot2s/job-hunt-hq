@@ -6,7 +6,17 @@ day, and tracks every application on a private dashboard on your own computer.
 
 > Paste a job link. Get a tailored resume, a cover letter and an honest match score in a few minutes.
 
-<!-- screenshots: docs/dashboard-jobs.png, docs/dashboard-overview.png, docs/resume-sample.png -->
+![Today's jobs on the dashboard](docs/dashboard-jobs.png)
+
+<table><tr>
+<td><img src="docs/dashboard-overview.png" alt="Overview: pipeline, streaks and activity"></td>
+<td><img src="docs/sample-resume.png" alt="A tailored resume built by Job Hunt HQ"></td>
+</tr><tr>
+<td><img src="docs/dashboard-insights.png" alt="Insights: what's working"></td>
+<td><img src="docs/dashboard-skills.png" alt="Skill-gap heatmap"></td>
+</tr></table>
+
+<sub>All screenshots use a fictional person, Alex Sample. After installing, ask Claude "show me the Job Hunt HQ demo" to click around it yourself.</sub>
 
 ## What it does
 
@@ -113,7 +123,7 @@ The measured ATS check, cover-letter rules, interview prep and skill-gap ideas a
 
 ## Feedback
 
-Issues and suggestions are welcome. If something breaks during setup, open an issue with the output of
-`python -m jhq doctor` (it contains no personal data).
+Issues and suggestions are welcome. If something breaks during setup, open an issue with the output of the
+health check (ask Claude to run `jhq doctor`; it contains no personal data).
 
 MIT licence. This is a personal project, not affiliated with Anthropic or any job board.

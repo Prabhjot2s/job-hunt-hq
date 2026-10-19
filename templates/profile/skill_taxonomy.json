@@ -527,8 +527,9 @@
    "level": "none",
    "re": [
     "uat",
-    "user acceptance",
-    "testing"
+    "user acceptance(?: testing)?",
+    "test cases",
+    "qa testing"
    ]
   },
   {

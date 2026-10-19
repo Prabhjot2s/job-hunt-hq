@@ -1,6 +1,6 @@
 ---
 name: job-hunt
-description: Job Hunt HQ, a truthful AI job-application system. Tailors resumes and cover letters from job descriptions (DOCX + PDF), runs a measured ATS check with keyword coverage, gives before/after ATS and callback estimates, records applications and outcomes in the user's tracker, builds interview prep packs and mock interviews, maintains a skill-gap heatmap and learning plan, helps with application-form answers and outreach drafts, and analyzes what is working. TRIGGER whenever the user pastes or links a job description, asks to tailor or review a resume, asks how well they match a job, asks for a cover letter, says they applied or submitted somewhere, reports a callback, interview, offer, rejection or ghosting, asks to age out old applications, has an interview or wants prep or a mock interview, asks about skill gaps or what to learn, or asks what is working in their job search.
+description: Job Hunt HQ, a truthful AI job-application system. Tailors resumes and cover letters from job descriptions (DOCX + PDF), runs a measured ATS check with keyword coverage, gives before/after ATS and callback estimates, records applications and outcomes in the user's tracker, builds interview prep packs and mock interviews, maintains a skill-gap heatmap and learning plan, helps with application-form answers and outreach drafts, and analyzes what is working. TRIGGER whenever the user pastes or links a job description, asks to tailor or review a resume, asks how well they match a job, asks for a cover letter, says they applied or submitted somewhere, reports a callback, interview, offer, rejection or ghosting, asks to age out old applications, has an interview or wants prep or a mock interview, asks about skill gaps or what to learn, asks what is working in their job search, or wants to see the Job Hunt HQ demo.
 ---
 
 # Job Hunt HQ
@@ -115,6 +115,10 @@ change one only when they confirm new experience (and update facts.md too). For 
 it, web-search current free resources for the top 3-5 gaps, give each a small proof project, skip gaps
 that can't be learned alone, and save `<data>/skill-gap/Learning Plan.md` + `.docx` (md2docx). Label
 any callback numbers "directional only".
+
+## Demo
+"Show me the demo": run `{{JHQ}} demo` in the background. It builds a throwaway folder for a fictional
+person and opens the dashboard on http://127.0.0.1:8797; the user's own data is never touched.
 
 ## Always
 - Never submit applications, send messages or emails, or fill forms unless the user explicitly asks

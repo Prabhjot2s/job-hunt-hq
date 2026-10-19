@@ -17,7 +17,6 @@ import csv
 import difflib
 import json
 import re
-import sys
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta
 

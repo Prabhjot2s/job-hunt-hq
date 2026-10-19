@@ -20,7 +20,7 @@ import argparse
 import hashlib
 import json
 from collections import Counter
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 from .. import config
 

@@ -876,9 +876,9 @@ function tailorPrompt(l){
     l.why ? `Why the radar flagged it: ${l.why}` : ``,
     l.gaps ? `Possible gaps: ${l.gaps}` : ``,
     ``,
-    `Steps: read the full posting (jhq jd --text <link>), show me the baseline match table, ask me only about real gaps, `,
-    `then build the package (resume, cover letter, Job Description.docx) and run the ATS check. Stay strictly truthful: `,
-    `never add experience, tools or numbers I haven't confirmed. Don't record it as applied until I say I submitted it.`
+    "Steps: read the full posting, show me the baseline match table, ask me only about real gaps, then build the package " +
+    "(resume, cover letter, Job Description.docx) and run the ATS check. Stay strictly truthful: never add experience, " +
+    "tools or numbers I haven't confirmed. Don't record it as applied until I say I submitted it."
   ].filter((x,i,a)=>x!=="" || (a[i-1]!==""&&i>0)).join("\n");
 }
 function leadCard(l, rank){
@@ -1005,6 +1005,7 @@ document.addEventListener("click", async e=>{
 
 /* ---------- wiring ---------- */
 const VIEWS = ["jobs","overview","apps","board","insights","skills"];
+if (VIEWS.includes(location.hash.slice(1))) S.view = location.hash.slice(1);  // e.g. /#insights
 function renderAll(){
   renderJobs(); renderOverview(); renderApps(); renderBoard(); renderInsights(); renderSkills(); setView(S.view,false);
   if (S.open) openDrawer(S.open);

@@ -51,10 +51,8 @@ A spec with only company/title + cover_letter adds a letter to an existing packa
 from __future__ import annotations
 
 import argparse
-import datetime as dt
 import json
 import re
-import sys
 import tempfile
 from pathlib import Path
 
@@ -350,6 +348,24 @@ def _forbidden(prof):
     return [f for f in prof.get("forbidden_phrases") or [] if f]
 
 
+def short_last_lines(pdf, max_words=2):
+    """Paragraphs whose last line holds only 1-2 words (a wasted line that looks sloppy)."""
+    found = []
+    for page in pdf:
+        for block in page.get_text("dict")["blocks"]:
+            lines = [(ln["bbox"][0], " ".join(s["text"] for s in ln["spans"]).strip())
+                     for ln in block.get("lines", [])]
+            lines = [(x, t) for x, t in lines if t]
+            for i in range(1, len(lines)):
+                x, text = lines[i]
+                # A paragraph ends where the block ends or the next line starts further left
+                # (the next bullet). Continuation lines of a bullet are indented past its bullet.
+                ends = i == len(lines) - 1 or lines[i + 1][0] < x - 3
+                if ends and len(text.split()) <= max_words and not text.isupper():
+                    found.append(text)
+    return found
+
+
 def qa_resume(docx_path, pdf_path, qa_dir, prof, extra_links):
     import pymupdf
     style = prof.get("style") or {}
@@ -404,6 +420,12 @@ def qa_resume(docx_path, pdf_path, qa_dir, prof, extra_links):
     for u in (*_profile_links(prof), *extra_links):
         if not any(u.rstrip("/") in (x or "") for x in pdf_links):
             warn.append(f"PDF missing link {u}")
+
+    orphans = short_last_lines(pdf)
+    report["short_last_lines"] = orphans
+    if orphans:
+        warn.append(f"{len(orphans)} bullet(s) end with 1-2 words on their own line: {orphans[:4]}; "
+                    "reword to fit one line or fill the second line")
 
     last = pdf[-1]
     usable = last.rect.height - doc.sections[0].bottom_margin.pt
